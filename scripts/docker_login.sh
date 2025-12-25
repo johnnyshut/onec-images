@@ -7,11 +7,19 @@ if [[ -z "$DOCKER_REGISTRY_URL" || -z "$DOCKER_LOGIN" || -z "$DOCKER_PASSWORD" ]
 fi
 
 set +x
-echo "$DOCKER_PASSWORD" | docker login "$DOCKER_REGISTRY_URL" -u "$DOCKER_LOGIN" --password-stdin
+
+login_url="$DOCKER_REGISTRY_URL"
+if [[ "$DOCKER_REGISTRY_URL" == docker.io/* ]]; then
+    login_url="docker.io"
+elif [[ "$DOCKER_REGISTRY_URL" != *.* ]] && [[ "$DOCKER_REGISTRY_URL" != */* ]]; then
+    login_url="docker.io"
+fi
+
+echo "$DOCKER_PASSWORD" | docker login "$login_url" -u "$DOCKER_LOGIN" --password-stdin
 
 if [[ $? -eq 0 ]]; then
-    echo "Успешная авторизация в $DOCKER_REGISTRY_URL"
+    echo "Успешная авторизация в $login_url"
 else
-    echo "Ошибка авторизации в $DOCKER_REGISTRY_URL"
+    echo "Ошибка авторизации в $login_url"
     exit 1
 fi

@@ -62,12 +62,24 @@ if ! $found_local; then
         else
             echo "Не удалось получить базовый образ из реестра: $BASE_IMAGE_TAG" >&2
             echo "Выполняю локальную сборку базового образа onec-platform:${onec_version}" >&2
-            PUSH_IMAGE=${PUSH_IMAGE} ONEC_VERSION="$onec_version" CI_SUFFIX="${CI_SUFFIX:-}" DOCKER_REGISTRY_URL="${DOCKER_REGISTRY_URL:-}" "${SCRIPT_DIR}/build-onec-platform.sh"
+            PUSH_IMAGE=${PUSH_IMAGE} ONEC_VERSION="$onec_version" CI_SUFFIX="${CI_SUFFIX:-}" \
+                DOCKER_REGISTRY_URL="${DOCKER_REGISTRY_URL:-}" \
+                DOCKER_LOGIN="${DOCKER_LOGIN:-}" \
+                DOCKER_PASSWORD="${DOCKER_PASSWORD:-}" \
+                ONEC_USERNAME="${ONEC_USERNAME:-}" \
+                ONEC_PASSWORD="${ONEC_PASSWORD:-}" \
+                "${SCRIPT_DIR}/build-onec-platform.sh"
         fi
     else
         echo "DOCKER_REGISTRY_URL пустой или равен 'local' — пропускаю попытку pull и строю локально" >&2
         echo "Выполняю локальную сборку базового образа onec-platform:${onec_version}" >&2
-        PUSH_IMAGE=${PUSH_IMAGE} ONEC_VERSION="$onec_version" CI_SUFFIX="${CI_SUFFIX:-}" DOCKER_REGISTRY_URL="${DOCKER_REGISTRY_URL:-}" "${SCRIPT_DIR}/build-onec-platform.sh"
+        PUSH_IMAGE=${PUSH_IMAGE} ONEC_VERSION="$onec_version" CI_SUFFIX="${CI_SUFFIX:-}" \
+            DOCKER_REGISTRY_URL="${DOCKER_REGISTRY_URL:-}" \
+            DOCKER_LOGIN="${DOCKER_LOGIN:-}" \
+            DOCKER_PASSWORD="${DOCKER_PASSWORD:-}" \
+            ONEC_USERNAME="${ONEC_USERNAME:-}" \
+            ONEC_PASSWORD="${ONEC_PASSWORD:-}" \
+            "${SCRIPT_DIR}/build-onec-platform.sh"
     fi
 fi
 
